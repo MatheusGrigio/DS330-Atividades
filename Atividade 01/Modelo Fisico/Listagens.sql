@@ -1,3 +1,5 @@
+use DS330_Ex01;
+
 SELECT Veiculo.Chassi, Marca.Nome AS "Marca", Modelo.Nome AS "Modelo", Veiculo.Ano, Veiculo.Km, Veiculo.Status FROM Veiculo
 INNER JOIN modelo ON veiculo.cod_modelo=modelo.cod_modelo
 INNER JOIN marca ON modelo.Cod_Marca = marca.Cod_Marca;
