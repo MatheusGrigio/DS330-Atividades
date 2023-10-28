@@ -1,31 +1,41 @@
+use DS330_Ex01;
+
 DELIMITER ##
-CREATE PROCEDURE alugar_veiculo(
-    IN data_Aluguel DATE,
-    IN data_Prevista DATE,
-    IN data_Devolucao DATE,
-    IN carteira_cliente VARCHAR(20),
-    IN cod_Cliente INT,
-    IN chassi VARCHAR(20)
+CREATE PROCEDURE ALUGAR_VEICULO (
+    IN DT_ALUGUEL DATE,
+    IN DT_PREVISTA DATE,
+    IN COD_CLI INT,
+    IN COD_VEI INT
 )
 BEGIN
-    DECLARE id_veiculo INT;
-    DECLARE id_cliente INT;
+    DECLARE estado VARCHAR(20);
+    DECLARE quant_cli INT;
     
-    SELECT Cod_veiculo INTO id_veiculo FROM Veiculo WHERE chassi = Chassi AND Status = "Disponível";
+    SELECT Status INTO estado FROM Veiculo WHERE Cod_Veiculo = COD_VEI;
     
-    IF Status NOT LIKE "Disponível" THEN
+    IF estado NOT IN "D" THEN
 		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Veículo não disponível para aluguel na data selecionada.';
     END IF;
     
-    SELECT Cod_cliente INTO id_cliente FROM Cliente WHERE CNH = carteira_cliente;
+    SELECT COUNT(*) INTO quant_cli FROM Cliente WHERE Cod_Cliente = COD_CLI;
     
-    IF v_cliente_id IS NULL THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cliente não encontrado ou CNH incorreta.';
+    IF quant_cli < 1 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Cliente não encontrado.';
     END IF;
     
-    INSERT INTO Aluguel (Data_Aluguel, Data_Prevista, Data_Devolucao, Cod_Cliente, Cod_Veiculo)
-    VALUES (data_Aluguel, data_Prevista, data_Devolucao, id_cliente, id_veiculo);
+    IF DT_ALUGUEL < NOW() THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data do aluguel não pode ser no passado.';
+	END IF;
     
-    UPDATE Veiculos SET Status="Disponível" WHERE Cod_veiculo = id_veiculo;
+    IF DT_PREVISTA <= DT_ALUGUEL THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data prevista da devolução precisa ser depois da data de aluguel.';
+	END IF;
+    
+    INSERT INTO Aluguel (Data_Aluguel, Data_Prevista, Cod_Cliente, Cod_Veiculo)
+    VALUES (DT_ALUGUEL, DT_PREVISTA, COD_CLI, COD_VEI);
+    
+    UPDATE VEICULO SET Status="A" WHERE Cod_veiculo = COD_VEI;
 END
 DELIMITER  ;
+
+CALL ALUGAR_VEICULO('2023-11-01', '2023-11-09', 1, 6);
