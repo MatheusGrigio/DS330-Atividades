@@ -35,6 +35,7 @@ drop table if exists Veiculo;
 create table Veiculo
 (
 	Cod_Veiculo integer not null auto_increment,
+    Placa varchar(8) unique not null,
     Chassi integer unique not null,
     Ano date not null,
     Km integer not null,
@@ -71,5 +72,6 @@ create table Pagamento
     Cod_Aluguel integer not null,
     primary key (Cod_Pagamento),
     foreign key (Cod_Cliente) references Cliente(Cod_Cliente),
-    foreign key (Cod_Aluguel) references Aluguel(Cod_Aluguel)
+    foreign key (Cod_Aluguel) references Aluguel(Cod_Aluguel),
+    check (Status in("A", "P"))
 );
