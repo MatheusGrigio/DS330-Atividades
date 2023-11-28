@@ -32,3 +32,15 @@ INNER JOIN Modelo ON Marca.cod_marca=Modelo.cod_marca
 LEFT JOIN Veiculo ON Modelo.cod_modelo=Veiculo.cod_modelo
 GROUP BY Modelo.nome
 ORDER BY Marca.nome;
+
+SELECT
+    CONCAT(YEAR(MIN(Data_Aluguel)), '-', LPAD(MONTH(MIN(Data_Aluguel)), 2, '0')) AS Month,
+    COUNT(*) AS "Quantidade de aluguéis"
+FROM
+    Aluguel
+WHERE
+    Data_Aluguel >= CURDATE() - INTERVAL 12 MONTH
+GROUP BY
+    YEAR(Data_Aluguel), MONTH(Data_Aluguel)
+ORDER BY
+    YEAR(Data_Aluguel) DESC, MONTH(Data_Aluguel) DESC;
