@@ -34,7 +34,8 @@ GROUP BY Modelo.nome
 ORDER BY Marca.nome;
 
 SELECT
-    CONCAT(YEAR(MIN(Data_Aluguel)), '-', LPAD(MONTH(MIN(Data_Aluguel)), 2, '0')) AS Month,
+    YEAR(MIN(Data_Aluguel)) AS "Ano",
+    MONTHNAME(MIN(Data_Aluguel)) AS "Mês",
     COUNT(*) AS "Quantidade de aluguéis"
 FROM
     Aluguel

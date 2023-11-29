@@ -73,5 +73,5 @@ create table Pagamento
     primary key (Cod_Pagamento),
     foreign key (Cod_Cliente) references Cliente(Cod_Cliente),
     foreign key (Cod_Aluguel) references Aluguel(Cod_Aluguel),
-    check (Status in("A", "P"))
+    check (Status in("E", "P"))
 );

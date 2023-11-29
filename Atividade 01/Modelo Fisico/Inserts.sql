@@ -89,4 +89,4 @@ INSERT INTO Pagamento (Metodo, Valor, Status, Cod_Cliente, Cod_Aluguel) VALUES
 ('Dinheiro', 600.00, 'P', 2, 2),
 ('Transferência', 450.00, 'P', 3, 3),
 ('Cartão', 700.00, 'P', 4, 4),
-('Dinheiro', 800.00, 'P', 5, 5);
+('Dinheiro', 800.00, 'E', 5, 5);
