@@ -45,3 +45,22 @@ GROUP BY
     YEAR(Data_Aluguel), MONTH(Data_Aluguel)
 ORDER BY
     YEAR(Data_Aluguel) DESC, MONTH(Data_Aluguel) DESC;
+
+SELECT 
+	Cliente.Nome AS "Nome Cliente",
+	Veiculo.Placa AS "Placa Veiculo"
+FROM Cliente
+INNER JOIN Aluguel ON Cliente.Cod_Cliente = Aluguel.Cod_Cliente
+INNER JOIN Veiculo ON Aluguel.Cod_Veiculo = Veiculo.Cod_Veiculo;
+
+SELECT *
+FROM Veiculo
+WHERE Km = (SELECT MIN(Km) FROM Veiculo);
+
+SELECT 
+	Cliente.Nome AS "Nome Cliente", 
+	COUNT(Aluguel.Cod_Aluguel) AS Total_Alugueis
+FROM Cliente
+LEFT JOIN Aluguel ON Cliente.Cod_Cliente = Aluguel.Cod_Cliente
+GROUP BY Cliente.Nome
+ORDER BY Total_Alugueis DESC;
